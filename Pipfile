@@ -10,6 +10,7 @@ ipython = "*"
 autopep8 = "*"
 schedule = "*"
 flask = "*"
+gunicorn = "*"
 
 [dev-packages]
 black = "*"
