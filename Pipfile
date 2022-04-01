@@ -9,6 +9,7 @@ python-dotenv = "*"
 ipython = "*"
 autopep8 = "*"
 schedule = "*"
+flask = "*"
 
 [dev-packages]
 black = "*"
