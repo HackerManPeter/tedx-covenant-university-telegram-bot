@@ -97,7 +97,7 @@ def getMessage():
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url="https://tedx-cu-bot.herokuserver.com/" + TOKEN)
+    bot.set_webhook(url="https://tedx-cu-bot.herokuapp.com/" + TOKEN)
     return "!", 200
 
 
