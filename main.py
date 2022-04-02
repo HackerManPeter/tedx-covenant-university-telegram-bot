@@ -32,7 +32,7 @@ def get_next_markup():
     markup.add(
         InlineKeyboardButton(
             "Buy TEDx Ticket",
-            url="http://campus.covenantuniversity.edu.ng/tedxcovenant-university",
+            url="http://campus.covenantuniversity.edu.ng/tedxcu",
         ),
         InlineKeyboardButton("Call Support", url="https://t.me/favournelson"),
     )
