@@ -12,7 +12,7 @@ load_dotenv()
 
 TOKEN = os.environ["TOKEN"]
 PHOTO_ID = os.environ["PHOTO_ID"]
-CHANNEL = os.environ["CHANNEL2"]
+CHANNEL = os.environ["CHANNEL"]
 
 bot = telebot.TeleBot(TOKEN)
 server = Flask(__name__)
@@ -85,8 +85,6 @@ TEDxCovenantUniversity Community",
         )
 
 
-# bot.remove_webhook()
-# bot.infinity_polling()
 @server.route("/" + TOKEN, methods=["POST"])
 def getMessage():
     json_string = request.get_data().decode("utf-8")
