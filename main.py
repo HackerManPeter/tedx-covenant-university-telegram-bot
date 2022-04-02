@@ -15,7 +15,7 @@ PHOTO_ID = os.environ["PHOTO_ID"]
 CHANNEL = os.environ["CHANNEL"]
 
 bot = telebot.TeleBot(TOKEN)
-app = Flask(__name__)
+server = Flask(__name__)
 
 
 # Heleper functions
@@ -85,7 +85,7 @@ TEDxCovenantUniversity Community",
         )
 
 
-@app.route("/" + TOKEN, methods=["POST"])
+@server.route("/" + TOKEN, methods=["POST"])
 def getMessage():
     json_string = request.get_data().decode("utf-8")
     update = telebot.types.Update.de_json(json_string)
@@ -93,12 +93,12 @@ def getMessage():
     return "!", 200
 
 
-@app.route("/")
+@server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url="https://tedx-cu-bot.herokuapp.com/" + TOKEN)
+    bot.set_webhook(url="https://tedx-cu-bot.herokuserver.com/" + TOKEN)
     return "!", 200
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    server.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
