@@ -4,8 +4,7 @@ from flask import Flask, request
 
 
 import telebot
-from .helper import get_next_markup, get_start_markup
-
+from helper import get_next_markup, get_start_markup
 from dotenv import load_dotenv
 
 load_dotenv()
