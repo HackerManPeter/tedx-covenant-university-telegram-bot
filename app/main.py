@@ -24,7 +24,6 @@ def start(message):
     message_text_list = message.text.split(" ")
 
     # Updates referal if the start message is more than length of 1 string
-    """send first name and last name if it is available"""
     if len(message_text_list) > 1:
         mongo.update_referral(message_text_list[-1], message.from_user.id)
 
