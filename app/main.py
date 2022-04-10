@@ -4,84 +4,99 @@ from flask import Flask, request
 
 
 import telebot
-from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
+import helper
+import mongo
 
 from dotenv import load_dotenv
 
 load_dotenv()
 
-TOKEN = os.environ["TOKEN"]
-PHOTO_ID = os.environ["PHOTO_ID"]
-CHANNEL = os.environ["CHANNEL"]
+TOKEN = os.environ["TOKEN2"]
+PHOTO_ID = os.environ["PHOTO_ID2"]
+CHANNEL = os.environ["CHANNEL2"]
 
 bot = telebot.TeleBot(TOKEN)
 server = Flask(__name__)
 
 
-# Heleper functions
-def get_start_markup():
-    markup = InlineKeyboardMarkup()
-    markup.row_width = 1
-    markup.add(InlineKeyboardButton("Start", callback_data="start"))
-    return markup
-
-
-def get_next_markup():
-    markup = InlineKeyboardMarkup()
-    markup.row_width = 1
-    markup.add(
-        InlineKeyboardButton(
-            "Buy TEDx Ticket",
-            url="http://campus.covenantuniversity.edu.ng/tedxcovenant-university",
-        ),
-        InlineKeyboardButton("Call Support", url="https://t.me/favournelson"),
-    )
-    return markup
-
-
 @bot.message_handler(commands=["start"], chat_types=["private"])
 def start(message):
+    """
+    Handle start messages
+    """
+    message_text_list = message.text.split(" ")
+
+    # Updates referal if the start message is more than length of 1 string
+    if len(message_text_list) > 1:
+        mongo.update_referral(message_text_list[-1], message.from_user.id)
+
     bot.send_photo(
         message.chat.id,
         caption="Welcome to Covenant University TEDx Community",
         photo=PHOTO_ID,
-        reply_markup=get_start_markup(),
+        reply_markup=helper.get_start_markup(),
     )
 
 
 @bot.callback_query_handler(func=lambda call: True)
-def start_query_handler(call):
+def callback_data_handler(call):
     # Check if a start command was sent, if not skip
-    if call.data != "start":
-        return
+    if call.data == "start":
 
-    # Initialise variables
-    user_id = call.from_user.id
-    chat_id = call.message.chat.id
+        # Initialise variables
+        user_id = call.from_user.id
+        chat_id = call.message.chat.id
 
-    # Check if user is a member of TEDx Channel, if not, end function execution
-    if bot.get_chat_member(CHANNEL, user_id=user_id).status == "left":
-        bot.send_message(
-            chat_id,
-            text="You're not a member of the channel⁉\n\
+        # Check if user is a member of TEDx Channel, if not, end function execution
+        if bot.get_chat_member(CHANNEL, user_id=user_id).status == "left":
+            bot.send_message(
+                chat_id,
+                text="You're not a member of the channel⁉\n\
 You need to join the [TEDxCovenantUniversity Channel](https://t.me/tedxcovenantuniversity)",
-            parse_mode="MarkdownV2",
-        )
+                parse_mode="MarkdownV2",
+            )
 
-        bot.send_message(
-            chat_id,
-            text="I have joined the channel",
-            reply_markup=get_start_markup(),
-        )
-        return
+            bot.send_message(
+                chat_id,
+                text="I have joined the channel",
+                reply_markup=helper.get_start_markup(),
+            )
+            return
 
-    else:
-        bot.send_message(
-            chat_id,
-            text="✅Thank you for joining the \
+        else:
+            bot.send_message(
+                chat_id,
+                text="✅Thank you for joining the \
 TEDxCovenantUniversity Community",
-            parse_mode="MarkdownV2",
-            reply_markup=get_next_markup(),
+                parse_mode="MarkdownV2",
+                reply_markup=helper.get_next_markup(),
+            )
+
+    # Creates a referral link for the user and adds them as a participant
+    if call.data == "link":
+        user = call.from_user
+        chat = call.message.chat
+        link_caption = (
+            "You can share this link with your friends and win some amazing prizes🤑\n"
+        )
+
+        # Checks if user has a telegram usename
+        if not user.username:
+            bot.send_message(
+                chat.id,
+                text=f"{link_caption}\nhttps://t.me/cu_atu_bot/?start=_0_{user.id}_",
+            )
+        else:
+            bot.send_message(
+                chat.id,
+                text=f"{link_caption}\nhttps://t.me/cu_atu_bot/?start=_{user.username}_0_{user.id}_",
+            )
+
+        mongo.insert_new_participant(
+            id=user.id,
+            username=user.username,
+            first_name=user.first_name,
+            last_name=user.last_name,
         )
 
 
