@@ -83,12 +83,12 @@ TEDxCovenantUniversity Community",
         if not user.username:
             bot.send_message(
                 chat.id,
-                text=f"{link_caption}\nhttps://t.me/cu_atu_bot/?start=_0_{user.id}_",
+                text=f"{link_caption}\nhttps://t.me/tedxcu_bot/?start=_0_{user.id}_",
             )
         else:
             bot.send_message(
                 chat.id,
-                text=f"{link_caption}\nhttps://t.me/cu_atu_bot/?start=_{user.username}_0_{user.id}_",
+                text=f"{link_caption}\nhttps://t.me/tedxcu_bot/?start=_{user.username}_0_{user.id}_",
             )
 
         mongo.insert_new_participant(
