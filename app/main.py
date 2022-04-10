@@ -4,8 +4,7 @@ from flask import Flask, request
 
 
 import telebot
-import helper
-import mongo
+from app import helper, mongo
 
 from dotenv import load_dotenv
 
