@@ -11,9 +11,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-TOKEN = os.environ["TOKEN2"]
-PHOTO_ID = os.environ["PHOTO_ID2"]
-CHANNEL = os.environ["CHANNEL2"]
+TOKEN = os.environ["TOKEN"]
+PHOTO_ID = os.environ["PHOTO_ID"]
+CHANNEL = os.environ["CHANNEL"]
 
 bot = telebot.TeleBot(TOKEN)
 server = Flask(__name__)
