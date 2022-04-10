@@ -4,7 +4,7 @@ from flask import Flask, request
 
 
 import telebot
-from app import helper, mongo
+from app import markups, mongo
 
 from dotenv import load_dotenv
 
@@ -33,7 +33,7 @@ def start(message):
         message.chat.id,
         caption="Welcome to Covenant University TEDx Community",
         photo=PHOTO_ID,
-        reply_markup=helper.get_start_markup(),
+        reply_markup=markups.get_start_markup(),
     )
 
 
@@ -58,7 +58,7 @@ You need to join the [TEDxCovenantUniversity Channel](https://t.me/tedxcovenantu
             bot.send_message(
                 chat_id,
                 text="I have joined the channel",
-                reply_markup=helper.get_start_markup(),
+                reply_markup=markups.get_start_markup(),
             )
             return
 
@@ -68,7 +68,7 @@ You need to join the [TEDxCovenantUniversity Channel](https://t.me/tedxcovenantu
                 text="✅Thank you for joining the \
 TEDxCovenantUniversity Community",
                 parse_mode="MarkdownV2",
-                reply_markup=helper.get_next_markup(),
+                reply_markup=markups.get_next_markup(),
             )
 
     # Creates a referral link for the user and adds them as a participant

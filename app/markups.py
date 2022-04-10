@@ -26,9 +26,9 @@ def get_next_markup():
     markup.add(
         InlineKeyboardButton(
             "Buy TEDx Ticket",
-            url="http://campus.covenantuniversity.edu.ng/tedxcovenant-university",
+            url="https://flutterwave.com/pay/tedxcovenantuniversitytickets",
         ),
-        InlineKeyboardButton("Call Support", url="https://t.me/favournelson"),
+        InlineKeyboardButton("Contact Support", url="https://t.me/favournelson"),
         InlineKeyboardButton("Get personalised Link", callback_data="link"),
     )
     return markup
