@@ -25,10 +25,17 @@ def get_next_markup():
     markup.row_width = 1
     markup.add(
         InlineKeyboardButton(
-            "Buy TEDx Ticket",
+            "Buy TEDx Ticket 🎟",
             url="https://flutterwave.com/pay/tedxcovenantuniversitytickets",
         ),
-        InlineKeyboardButton("Contact Support", url="https://t.me/favournelson"),
-        InlineKeyboardButton("Get personalised Link", callback_data="link"),
+        InlineKeyboardButton(
+            "Buy your TEDx merch 🧣🕶️",
+            url="https://flutterwave.com/store/custudentcouncil/lth6m3fpfqbw",
+        ),
+        InlineKeyboardButton(
+            "Connect with us 🔗", url="https://bit.ly/TEDxCovenantUniversity2022"
+        ),
+        InlineKeyboardButton("Contact Support 👩‍💻", url="https://t.me/favournelson"),
+        InlineKeyboardButton("Get referral Link 🖇", callback_data="link"),
     )
     return markup
