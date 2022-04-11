@@ -46,9 +46,7 @@ def update_referral(referrer_string: str, user_id: int):
     """
     Updates the leader board
     """
-    print("referral string", referrer_string)
     referrer_id = referrer_string.split("_")[-2]
-    print("referral id", referrer_id)
 
     # Checks if the user is trying to refer themself
     if int(referrer_id) == user_id:
