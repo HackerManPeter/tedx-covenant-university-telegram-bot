@@ -35,7 +35,7 @@ def get_next_markup():
         InlineKeyboardButton(
             "Connect with us 🔗", url="https://bit.ly/TEDxCovenantUniversity2022"
         ),
-        InlineKeyboardButton("Contact Support 👩‍💻", url="https://t.me/favournelson"),
+        InlineKeyboardButton("Contact Support 👩‍💻", url="https://t.me/mofope_a"),
         InlineKeyboardButton("Get referral Link 🖇", callback_data="link"),
     )
     return markup
