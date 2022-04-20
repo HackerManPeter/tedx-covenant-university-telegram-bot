@@ -5,7 +5,8 @@ from flask import Flask, request
 
 import telebot
 
-import markups, mongo
+# from app import markups, mongo
+from app import markups, mongo
 
 from dotenv import load_dotenv
 
