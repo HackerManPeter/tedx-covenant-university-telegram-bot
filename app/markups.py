@@ -24,12 +24,16 @@ def get_next_markup():
     markup = InlineKeyboardMarkup()
     markup.row_width = 1
     markup.add(
+        # InlineKeyboardButton(
+        #     "Buy TEDx Ticket 🎟",
+        #     url="https://flutterwave.com/pay/tedxcovenantuniversitytickets",
+        # ),
+        # InlineKeyboardButton(
+        #     "Buy your TEDx merch 🧣🕶️",
+        #     url="https://flutterwave.com/store/custudentcouncil/lth6m3fpfqbw",
+        # ),
         InlineKeyboardButton(
             "Buy TEDx Ticket 🎟",
-            url="https://flutterwave.com/pay/tedxcovenantuniversitytickets",
-        ),
-        InlineKeyboardButton(
-            "Buy your TEDx merch 🧣🕶️",
             url="https://flutterwave.com/store/custudentcouncil/lth6m3fpfqbw",
         ),
         InlineKeyboardButton(
