@@ -34,7 +34,7 @@ def start(message):
 
     bot.send_photo(
         message.chat.id,
-        caption=f"Hi {users_firstname.title()},  My name is Tom 👨‍✈️, the TEDxbot, and I am here to make your experience memorable.",
+        caption=f"Hi {users_firstname.title()},  My name is Alex 👨‍✈️, the TEDxbot, and I am here to make your experience memorable.",
         photo=PHOTO_ID,
         reply_markup=markups.get_start_markup(),
     )
