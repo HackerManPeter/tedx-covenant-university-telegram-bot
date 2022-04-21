@@ -7,7 +7,7 @@ from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
 load_dotenv()
 
 
-def get_start_markup():
+def get_start_markup() -> InlineKeyboardMarkup:
     """
     Start markup
     """
@@ -17,7 +17,7 @@ def get_start_markup():
     return markup
 
 
-def get_next_markup():
+def get_next_markup() -> InlineKeyboardMarkup:
     """
     Adds Markup for Bot functions
     """
