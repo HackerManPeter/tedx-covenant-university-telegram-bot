@@ -34,7 +34,7 @@ def get_next_markup():
         # ),
         InlineKeyboardButton(
             "Buy TEDx Ticket 🎟",
-            url="https://flutterwave.com/store/custudentcouncil/lth6m3fpfqbw",
+            url="https://flutterwave.com/pay/60mayht7ffdm",
         ),
         InlineKeyboardButton(
             "Connect with us 🔗", url="https://bit.ly/TEDxCovenantUniversity2022"
