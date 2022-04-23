@@ -15,6 +15,7 @@ TOKEN = os.environ["TOKEN2"]
 PHOTO_ID = os.environ["PHOTO_ID2"]
 CHANNEL = os.environ["CHANNEL2"]
 ADMIN = os.environ["ADMIN"]
+AGS = os.environ["AGS"]
 
 bot = telebot.TeleBot(TOKEN)
 server = Flask(__name__)
@@ -115,7 +116,9 @@ def broadcast_message(message):
     """
     Brodcasts messages from admin to all bot users
     """
-    user_ids = mongo.get_ids()
+    user_ids = [
+        AGS,
+    ]
     for user_id in user_ids:
         bot.send_message(user_id, text=message.text)
 
