@@ -11,11 +11,12 @@ client = MongoClient(CONNECTION_STRING)
 
 db = client.get_default_database()
 leader_board = db.leaderboard
+bot_users = db.botUsers
 
 
-def insert_new_participant(id: int, **kwargs):
+def __check_kwargs(**kwargs) -> tuple:
     """
-    Adds a participant to the leaderboard
+    Validated keyword arguments
     """
     if kwargs["username"]:
         username = kwargs["username"]
@@ -28,6 +29,15 @@ def insert_new_participant(id: int, **kwargs):
         last_name = None
 
     first_name = kwargs["first_name"]
+
+    return username, first_name, last_name
+
+
+def insert_new_participant(id: int, **kwargs) -> None:
+    """
+    Adds a participant to the leaderboard
+    """
+    username, first_name, last_name = __check_kwargs(**kwargs)
     try:
         leader_board.insert_one(
             {
@@ -42,7 +52,25 @@ def insert_new_participant(id: int, **kwargs):
         return
 
 
-def update_referral(referrer_string: str, user_id: int):
+def insert_new_user(id: int, **kwargs) -> None:
+    """
+    Adds user to the database
+    """
+    username, first_name, last_name = __check_kwargs(**kwargs)
+    try:
+        bot_users.insert_one(
+            {
+                "_id": str(id),
+                "username": f"{username}",
+                "first_name": f"{first_name}",
+                "last_name": f"{last_name}",
+            }
+        )
+    except:
+        return
+
+
+def update_referral(referrer_string: str, user_id: int) -> None:
     """
     Updates the leader board
     """
@@ -64,3 +92,11 @@ def update_referral(referrer_string: str, user_id: int):
     leader_board.update_one(
         {"_id": referrer_id}, {"$push": {"referrals": str(user_id)}}
     )
+
+
+def get_ids():
+    """
+    Get's the telegram Id's for all bot users
+    """
+    all_users = bot_users.find({})
+    return [user["_id"] for user in all_users]

@@ -14,6 +14,7 @@ load_dotenv()
 TOKEN = os.environ["TOKEN"]
 PHOTO_ID = os.environ["PHOTO_ID"]
 CHANNEL = os.environ["CHANNEL"]
+ADMIN = os.environ["ADMIN"]
 
 bot = telebot.TeleBot(TOKEN)
 server = Flask(__name__)
@@ -24,6 +25,14 @@ def start(message):
     """
     Handle start messages
     """
+    user = message.from_user
+    mongo.insert_new_user(
+        id=user.id,
+        username=user.username,
+        first_name=user.first_name,
+        last_name=user.last_name,
+    )
+
     message_text_list = message.text.split(" ")
     users_firstname = message.from_user.first_name.split(" ")[0]
 
@@ -99,6 +108,16 @@ TEDxCovenantUniversity Community",
             first_name=user.first_name,
             last_name=user.last_name,
         )
+
+
+@bot.message_handler(func=lambda message: message.from_user.id == int(ADMIN))
+def broadcast_message(message):
+    """
+    Brodcasts messages from admin to all bot users
+    """
+    user_ids = mongo.get_ids()
+    for user_id in user_ids:
+        bot.send_message(user_id, text=message.text)
 
 
 @server.route("/" + TOKEN, methods=["POST"])
