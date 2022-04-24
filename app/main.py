@@ -111,7 +111,7 @@ TEDxCovenantUniversity Community",
         )
 
 
-@bot.message_handler(func=lambda message: message.from_user.id == int(ADMIN))
+@bot.message_handler(func=lambda message: message.from_user.id == int(AGS))
 def broadcast_message(message):
     """
     Brodcasts messages from admin to all bot users
