@@ -1,5 +1,6 @@
 import os
 
+from flask import Flask, request
 
 import telebot
 
@@ -13,9 +14,9 @@ TOKEN = os.environ["TOKEN"]
 PHOTO_ID = os.environ["PHOTO_ID"]
 CHANNEL = os.environ["CHANNEL"]
 ADMIN = os.environ["ADMIN"]
-AGS = os.environ["AGS"]
 
 bot = telebot.TeleBot(TOKEN)
+server = Flask(__name__)
 
 
 @bot.message_handler(commands=["start"], chat_types=["private"])
@@ -108,14 +109,12 @@ def get_referral_link(call):
     )
 
 
-@bot.message_handler(func=lambda message: message.from_user.id == int(AGS))
+@bot.message_handler(func=lambda message: message.from_user.id == int(ADMIN))
 def broadcast_message(message):
     """
     Brodcasts messages from admin to all bot users
     """
-    user_ids = [
-        AGS,
-    ]
+    user_ids = mongo.get_ids()
     for user_id in user_ids:
         bot.send_message(user_id, text=message.text)
 
