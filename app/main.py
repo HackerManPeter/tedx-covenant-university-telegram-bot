@@ -24,6 +24,8 @@ def start(message):
     Handle start messages
     """
     user = message.from_user
+
+    # Add new user to the broadcasting database
     mongo.insert_new_user(
         id=user.id,
         username=user.username,
@@ -32,12 +34,13 @@ def start(message):
     )
 
     message_text_list = message.text.split(" ")
-    users_firstname = message.from_user.first_name.split(" ")[0]
+    users_firstname = user.first_name.split(" ")[0]
 
     # Updates referal if the start message is more than length of 1 string
     if len(message_text_list) > 1:
-        mongo.update_referral(message_text_list[-1], message.from_user.id)
+        mongo.update_referral(message_text_list[-1], user.id)
 
+    # Reply /start message
     bot.send_photo(
         message.chat.id,
         caption=f"Hi {users_firstname.title()},  My name is Alex 👨‍✈️, the TEDxbot, and I am here to make your experience memorable.",
@@ -48,6 +51,9 @@ def start(message):
 
 @bot.callback_query_handler(func=lambda call: call.data == "start")
 def start_query_handler(call):
+    """
+    Handle the "start" Callback query
+    """
     # Initialise variables
     user_id = call.from_user.id
     chat_id = call.message.chat.id
@@ -108,6 +114,28 @@ def get_referral_link(call):
     )
 
 
+@bot.message_handler(func=lambda message: message.text.startswith("/sendphoto"))
+def broadcast_image(message):
+    """
+    Handles messages with meant for image captions
+    """
+    # Check if User is admin
+    if message.from_user.id != int(AGS):
+        return
+
+    # Remove "/sendphoto" from message.text
+    caption = "\n".join(message.text.split("\n")[1:])
+
+    # Broadcast image with message.text as caption
+    image_id = mongo.get_image_id()
+
+    user_ids = [
+        AGS,
+    ]
+    for user_id in user_ids:
+        bot.send_photo(user_id, photo=image_id, caption=caption)
+
+
 @bot.message_handler(func=lambda message: message.from_user.id == int(AGS))
 def broadcast_message(message):
     """
@@ -118,6 +146,17 @@ def broadcast_message(message):
     ]
     for user_id in user_ids:
         bot.send_message(user_id, text=message.text)
+
+
+@bot.message_handler(content_types=["photo"])
+def save_image(message):
+    """
+    Get's image ID from message and upload to Mongo
+    """
+    if message.from_user.id != int(AGS):
+        return
+    image_id = message.photo[0].file_id
+    mongo.change_image_id(image_id)
 
 
 bot.infinity_polling()
