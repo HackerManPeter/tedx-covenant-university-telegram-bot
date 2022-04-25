@@ -12,6 +12,7 @@ client = MongoClient(CONNECTION_STRING)
 db = client.get_default_database()
 leader_board = db.leaderboard
 bot_users = db.botUsers
+image = db.images
 
 
 def __check_kwargs(**kwargs) -> tuple:
@@ -100,3 +101,18 @@ def get_ids():
     """
     all_users = bot_users.find({})
     return [user["_id"] for user in all_users]
+
+
+def change_image_id(id: int) -> None:
+    """
+    change image id
+    """
+
+    image.update_one({"_id": "image"}, {"$set": {"image_id": id}})
+
+
+def get_image_id() -> str:
+    """
+    Get Image ID from mongo
+    """
+    return image.find({"_id": "image"})[0]["image_id"]
