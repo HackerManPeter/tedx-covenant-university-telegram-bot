@@ -1,4 +1,6 @@
 import os
+import time
+from typing import List
 
 from flask import Flask, request
 
@@ -18,6 +20,17 @@ ADMIN = os.environ["ADMIN"]
 bot = telebot.TeleBot(TOKEN)
 server = Flask(__name__)
 
+def send_messages(ids: List[str], func, **kwargs):
+    count = 0
+    for id in ids:
+        try:
+            func(id, **kwargs)
+            count += 1
+        except:
+            continue
+        if count % 20 == 0:
+            time.sleep(.7)
+
 
 @bot.message_handler(commands=["start"], chat_types=["private"])
 def start(message):
@@ -25,6 +38,10 @@ def start(message):
     Handle start messages
     """
     user = message.from_user
+    if user.id == int(ADMIN):
+        message = '''Hi Admin, any messsage you send to the bot would be broadcast to all users'''
+        bot.send_message(user.id, text=message)
+        return
 
     # Add new user to the broadcasting database
     mongo.insert_new_user(
