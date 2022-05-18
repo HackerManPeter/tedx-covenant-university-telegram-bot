@@ -5,7 +5,10 @@ from typing import List
 
 import telebot
 
-import markups, mongo
+try:
+    from app import markups, mongo
+except:
+    import markups, mongo
 
 from dotenv import load_dotenv
 
@@ -38,7 +41,12 @@ def start(message):
     """
     user = message.from_user
     if user.id == int(AGS):
-        message = '''Hi Admin, any messsage you send to the bot would be broadcast to all users'''
+        message = '''Hi Admin, any messsage you send to the bot would be broadcast to all users
+/sendphoto
+I am the tedx Bot
+```
+This would send the a photo with the caption "I am the tedx Bot"
+```'''
         bot.send_message(user.id, text=message)
         return
 
@@ -149,7 +157,7 @@ def broadcast_image(message):
     user_ids = [
         AGS,
     ]
-    send_messages(user_ids, photo=image_id, caption=caption)
+    send_messages(user_ids, func=bot.send_photo, photo=image_id, caption=caption)
 
 
 @bot.message_handler(func=lambda message: message.from_user.id == int(AGS))
@@ -160,7 +168,7 @@ def broadcast_message(message):
     user_ids = [
         AGS,
     ]
-    send_messages(user_ids, text=message.text)
+    send_messages(user_ids, func=bot.send_message, text=message.text)
 
 
 @bot.message_handler(content_types=["photo"])
@@ -173,5 +181,5 @@ def save_image(message):
     image_id = message.photo[0].file_id
     mongo.change_image_id(image_id)
 
-
-bot.infinity_polling()
+if __name__ == "__main__":
+    bot.infinity_polling()  

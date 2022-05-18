@@ -108,11 +108,11 @@ def change_image_id(id: int) -> None:
     change image id
     """
 
-    image.update_one({"_id": "image"}, {"$set": {"image_id": id}})
+    image.update_one({"_id": "photo"}, {"$set": {"photo_id": id}})
 
 
 def get_image_id() -> str:
     """
     Get Image ID from mongo
     """
-    return image.find({"_id": "image"})[0]["image_id"]
+    return image.find({"_id":"photo"})[0]["photo_id"]
