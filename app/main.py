@@ -1,4 +1,6 @@
 import os
+import time
+from typing import List
 
 
 import telebot
@@ -13,9 +15,20 @@ TOKEN = os.environ["TOKEN2"]
 PHOTO_ID = os.environ["PHOTO_ID2"]
 CHANNEL = os.environ["CHANNEL2"]
 ADMIN = os.environ["ADMIN"]
-AGS = os.environ["AGS"]
+AGS = int(os.environ["AGS"])
 
 bot = telebot.TeleBot(TOKEN)
+
+def send_messages(ids: List[str], func, **kwargs):
+    count = 0
+    for id in ids:
+        try:
+            func(id, **kwargs)
+            count += 1
+        except:
+            continue
+        if count % 20 == 0:
+            time.sleep(.7)
 
 
 @bot.message_handler(commands=["start"], chat_types=["private"])
@@ -24,6 +37,10 @@ def start(message):
     Handle start messages
     """
     user = message.from_user
+    if user.id == int(AGS):
+        message = '''Hi Admin, any messsage you send to the bot would be broadcast to all users'''
+        bot.send_message(user.id, text=message)
+        return
 
     # Add new user to the broadcasting database
     mongo.insert_new_user(
@@ -132,8 +149,7 @@ def broadcast_image(message):
     user_ids = [
         AGS,
     ]
-    for user_id in user_ids:
-        bot.send_photo(user_id, photo=image_id, caption=caption)
+    send_messages(user_ids, photo=image_id, caption=caption)
 
 
 @bot.message_handler(func=lambda message: message.from_user.id == int(AGS))
@@ -144,8 +160,7 @@ def broadcast_message(message):
     user_ids = [
         AGS,
     ]
-    for user_id in user_ids:
-        bot.send_message(user_id, text=message.text)
+    send_messages(user_ids, text=message.text)
 
 
 @bot.message_handler(content_types=["photo"])
