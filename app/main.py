@@ -40,12 +40,18 @@ def start(message):
     user = message.from_user
     if user.id == int(ADMIN):
         message = '''Hi Admin, any messsage you send to the bot would be broadcast to all users
+
+Example
+```
 /sendphoto
 I am the tedx Bot
 ```
-This would send the a photo with the caption "I am the tedx Bot"
-```'''
-        bot.send_message(user.id, text=message)
+
+This would send the a photo with the caption "I am the tedx Bot" to all abot users
+
+Any message sent to the bot that is not a /start message would be broadcast to all users
+'''
+        bot.send_message(user.id, text=message, parse_mode='MarkdownV2')
         return
 
     # Add new user to the broadcasting database
